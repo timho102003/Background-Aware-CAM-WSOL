@@ -3,3 +3,4 @@ prepare_cub200.sh
 lightning_logs/
 dataset/
 .DS_Store
+cam_out*
