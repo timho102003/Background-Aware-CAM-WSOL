@@ -28,7 +28,6 @@ class CUB200(Dataset):
             img = self.transform(img)
         target = torch.tensor([target], dtype=torch.int64)
         meta_info = {"filename": imgname, "size": (height, width)}
-        # print(meta_info)
         return img, target, meta_info
     
     def __len__(self):
@@ -48,7 +47,7 @@ class CUB200Dataset(LightningDataModule):
                 T.Resize((256, 256)),
                 T.RandomCrop((224, 224)),
                 T.RandomHorizontalFlip(p=0.5),
-                T.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.1),
+                # T.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0),
                 T.ToTensor(),
                 T.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
             ]
@@ -63,7 +62,7 @@ class CUB200Dataset(LightningDataModule):
             ]
         )
         self.dims = (3, 224, 224)
-        self.num_classes = 10
+        self.num_classes = 200
 
     def setup(self, stage=None):
 
@@ -79,7 +78,7 @@ class CUB200Dataset(LightningDataModule):
         # Assign test dataset for use in dataloader(s)
         if stage in ["test", "predict"] or stage is None:
             self.cub200_test = CUB200(data_dir=self.data_dir,
-                                      data_list=self.train_txt, 
+                                      data_list=self.test_txt, 
                                       transform=self.infer_transform)
 
     def train_dataloader(self):

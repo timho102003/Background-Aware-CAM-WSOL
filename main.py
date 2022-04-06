@@ -12,10 +12,10 @@ warnings.filterwarnings("ignore")
 def train(args):
     # dict_args = vars(args)
     if args.algorithm_name.lower() == "wsol":
-        cur_dataset = CUB200Dataset()
+        cur_dataset = CUB200Dataset(batch_size=args.batch_size)
         cur_model = WSOLSystem(backbone=args.backbone,
                                mea_m_dim=args.mea_m_dim,
-                               class_num=cur_dataset.num_classes,
+                               class_num=args.class_num,
                                lr=args.lr,
                                num_workers=args.num_workers,
                                max_epoch=args.max_epochs,
@@ -43,7 +43,7 @@ def train(args):
 def inference(args):
     if args.algorithm_name.lower() == "wsol":
         cur_dataset = CUB200Dataset()
-        cur_model = WSOLSystem(backbone=args.backbone, class_num=cur_dataset.num_classes)
+        cur_model = WSOLSystem(backbone=args.backbone, class_num=args.class_num)
     else:
         raise KeyError("Algorithm Name: {} is not supported".format(
             temp_args.algorithm_name))
